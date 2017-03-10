@@ -11,8 +11,6 @@ export class Logger implements ILogger {
     private globalLogLevel: string = "debug";
     private logger: LoggerInstance;
     private transportList: Array<any> = [];
-    private consoleTransport: any;
-    private fileTransport: any;
 
     constructor(logLevel?: string, filename?: string, logger?: LoggerInstance) {
         this.logger = logger || <any> winston;
@@ -22,21 +20,21 @@ export class Logger implements ILogger {
             this.globalLogLevel = logLevel;
         }
 
-        this.consoleTransport = new winston.transports.Console({
+        let consoleTransport = new winston.transports.Console({
             colorize: true,
             level: this.globalLogLevel,
         });
 
         this.logger.configure({
             transports: [
-                this.consoleTransport,
+                consoleTransport,
             ],
         });
 
-        this.transportList.push(this.consoleTransport);
+        this.transportList.push(consoleTransport);
 
         if (Logger.flag === true && filename) {
-            this.fileTransport = new winston.transports.File({
+            let fileTransport = new winston.transports.File({
                 filename: filename,
                 handleExceptions: true,
                 level: this.globalLogLevel,
@@ -44,12 +42,12 @@ export class Logger implements ILogger {
 
             this.logger.configure({
                 transports: [
-                    this.consoleTransport,
-                    this.fileTransport,
+                    consoleTransport,
+                    fileTransport,
                 ],
             });
 
-            this.transportList.push(this.fileTransport);
+            this.transportList.push(fileTransport);
             Logger.flag = false;
         }
     }
@@ -61,15 +59,15 @@ export class Logger implements ILogger {
     public warn(msg: string, logObject?: any, loggingMetadata?: string): void {
        if(typeof(logObject === 'undefined') && typeof(loggingMetadata) !== 'undefined')
        {
-           this.logger.error(msg, loggingMetadata);
+           this.logger.warn(msg, loggingMetadata);
        }
        else if (typeof(logObject !== 'undefined') && typeof(loggingMetadata) !== 'undefined')
        {
-           this.logger.error(msg, logObject);
+           this.logger.warn(msg, logObject);
        }
        else if (typeof(logObject === 'undefined') && typeof(loggingMetadata) === 'undefined')
        {
-           this.logger.error(msg);
+           this.logger.warn(msg);
        }        
        else
        { 

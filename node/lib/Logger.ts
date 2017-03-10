@@ -11,6 +11,8 @@ export class Logger implements ILogger {
     private globalLogLevel: string = "debug";
     private logger: LoggerInstance;
     private transportList: Array<any> = [];
+    private consoleTransport: any;
+    private fileTransport: any;
 
     constructor(logLevel?: string, filename?: string, logger?: LoggerInstance) {
         this.logger = logger || <any> winston;
@@ -20,21 +22,21 @@ export class Logger implements ILogger {
             this.globalLogLevel = logLevel;
         }
 
-        let consoleTransport = new winston.transports.Console({
+        this.consoleTransport = new winston.transports.Console({
             colorize: true,
             level: this.globalLogLevel,
         });
 
         this.logger.configure({
             transports: [
-                consoleTransport,
+                this.consoleTransport,
             ],
         });
 
-        this.transportList.push(consoleTransport);
+        this.transportList.push(this.consoleTransport);
 
-        if (Logger.flag === true && filename ) {
-            let fileTransport = new winston.transports.File({
+        if (Logger.flag === true && filename) {
+            this.fileTransport = new winston.transports.File({
                 filename: filename,
                 handleExceptions: true,
                 level: this.globalLogLevel,
@@ -42,38 +44,50 @@ export class Logger implements ILogger {
 
             this.logger.configure({
                 transports: [
-                    consoleTransport,
-                    fileTransport,
+                    this.consoleTransport,
+                    this.fileTransport,
                 ],
             });
 
-            this.transportList.push(fileTransport);
+            this.transportList.push(this.fileTransport);
             Logger.flag = false;
         }
     }
 
-   public error(msg: string, logObject?: any): void {
-        this.logger.error(msg, logObject);
+   public error(msg: string, logObject?: any, loggingMetadata?: string): void {
+        this.logger.error(msg, logObject, loggingMetadata);
     }
 
-    public warn(msg: string, logObject?: any): void {
-        this.logger.warn(msg, logObject);
+    public warn(msg: string, logObject?: any, loggingMetadata?: string): void {
+        this.logger.warn(msg, logObject, loggingMetadata);
     }
 
-    public info(msg: string, logObject?: any): void {
-        this.logger.info(msg, logObject);
+    public info(msg: string, logObject?: any, loggingMetadata?: string): void {
+        this.logger.info(msg, logObject, loggingMetadata);
     }
 
-    public verbose(msg: string, logObject?: any): void {
-        this.logger.verbose(msg, logObject);
+    public verbose(msg: string, logObject?: any, loggingMetadata?: string): void {
+        this.logger.verbose(msg, logObject, loggingMetadata);
     }
 
-    public debug(msg: string, logObject?: any): void {
-        this.logger.debug(msg, logObject);
+    public debug(msg: string, logObject?: any, loggingMetadata?: string): void {
+        this.logger.debug(msg, logObject, loggingMetadata);
     }
 
     public getConfiguredTransports(): Array<any> {
         return this.transportList;
+    }
+
+    public addTransport(transportObject: any): void {
+        this.logger.add(transportObject);
+
+        this.transportList.push(transportObject);
+    }
+
+    public removeTransport(transportObject: any): void {
+        this.logger.remove(transportObject);
+
+        this.transportList.pop();
     }
 
     public normalizeWith(normalizer: (logObject: any) => any): ILogger {

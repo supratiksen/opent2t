@@ -5,6 +5,7 @@ import * as path from "path";
 import * as fs from "mz/fs";
 import test from "ava";
 import { TestContext } from "ava";
+import * as winston from "winston";
 
 import {
     OpenT2T,
@@ -141,9 +142,25 @@ test("Logger with default parameters can be instantiated multiple times", async 
 });
 
 test("Logger can be instantiated with custom file parameter", async t => {
-    let logger = new Logger(undefined, testLogFileName) ;
+    let logger = new Logger(undefined, testLogFileName);
     logger.info("Writing default level to default console + file.");
     logger.warn("writing warn level to default console + file.");
+    t.is(logger.getConfiguredTransports().length, 2);
+});
+
+test("Logger with default parameters can log custom loggingMetadata parameter like a correlationVector", async t => {
+    let logger = new Logger();
+    logger.info("Writing default level to default console with loggingMetadata: ", undefined, "ABC123");
+    logger.warn("writing warn level to default console with loggingMetadata.", undefined, "XYZ456");
+});
+
+test("Logger with default parameters can add and remove transports", async t => {
+    let logger = new Logger();
+    logger.addTransport(winston.transports.Http);
+    t.is(logger.getConfiguredTransports().length, 2);
+    logger.removeTransport(winston.transports.Http);
+    t.is(logger.getConfiguredTransports().length, 1);
+    logger.addTransport(winston.transports.Http);
     t.is(logger.getConfiguredTransports().length, 2);
 });
 

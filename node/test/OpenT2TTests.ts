@@ -150,8 +150,9 @@ test("Logger can be instantiated with custom file parameter", async t => {
 
 test("Logger with default parameters can log custom loggingMetadata parameter like a correlationVector", async t => {
     let logger = new Logger();
-    logger.info("Writing default level to default console with loggingMetadata: ", undefined, "ABC123");
-    logger.warn("writing warn level to default console with loggingMetadata.", undefined, "XYZ456");
+    let stringObject = "Random String"
+    logger.info("Writing default level to default console with loggingMetadata:", stringObject, "ABC123");
+    logger.warn("writing warn level to default console with loggingMetadata:", undefined, "XYZ456");
 });
 
 test("Logger with default parameters can add and remove transports", async t => {

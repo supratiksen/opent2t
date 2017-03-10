@@ -59,7 +59,22 @@ export class Logger implements ILogger {
     }
 
     public warn(msg: string, logObject?: any, loggingMetadata?: string): void {
-        this.logger.warn(msg, logObject, loggingMetadata);
+       if(typeof(logObject === 'undefined') && typeof(loggingMetadata) !== 'undefined')
+       {
+           this.logger.error(msg, loggingMetadata);
+       }
+       else if (typeof(logObject !== 'undefined') && typeof(loggingMetadata) !== 'undefined')
+       {
+           this.logger.error(msg, logObject);
+       }
+       else if (typeof(logObject === 'undefined') && typeof(loggingMetadata) === 'undefined')
+       {
+           this.logger.error(msg);
+       }        
+       else
+       { 
+           this.logger.warn(msg, logObject, loggingMetadata);
+       }
     }
 
     public info(msg: string, logObject?: any, loggingMetadata?: string): void {

@@ -100,7 +100,11 @@ export class Logger implements ILogger {
     public removeTransport(transportObject: any): void {
         this.logger.remove(transportObject);
 
-        this.transportList.pop();
+        var index = this.transportList.indexOf(transportObject);
+        if (index > -1)
+        {
+            this.transportList.splice(index, 1);
+        }
     }
 
     public normalizeWith(normalizer: (logObject: any) => any): ILogger {

@@ -130,7 +130,7 @@ test("Logger with default parameters can log a non-primitive type", async t => {
     let myArray: Array<any> = ["firstObject", "secondObject", ["nestedObj1", "nestedObj2"]];
     logger.info("Writing default level to default console.");
     logger.debug("writing debug level to default console.");
-    logger.warn("Writing array object to default console", myArray);
+    logger.error("Writing array object to default console", myArray);
 });
 
 test("Logger with default parameters can be instantiated multiple times", async t => {
@@ -148,11 +148,27 @@ test("Logger can be instantiated with custom file parameter", async t => {
     t.is(logger.getConfiguredTransports().length, 2);
 });
 
-test("Logger with default parameters can log custom loggingMetadata parameter like a correlationVector", async t => {
+test("Logger can log custom logMetadata, e.g. correlationVector", async t => {
     let logger = new Logger();
     let stringObject = "Random String"
-    logger.info("Writing default level to default console with loggingMetadata:", stringObject, "ABC123");
-    logger.warn("writing warn level to default console with loggingMetadata:", undefined, "XYZ456");
+    logger.info("Logging at default level with logMetadata:", stringObject, "ABC123");
+
+    // Swapping order of logObject and logMetadata since the latter will be used more often
+    // Pro: Simple usage
+    logger.warn("Logging at  warn level with logMetadata & logObject:", "ABC123", stringObject);
+    logger.warn("Logging at  warn level without logObject:", "ABC123");
+
+    // Map: Usage gets complicated
+/*    var temp = new Map<any, string>();
+    temp.set('logObject', stringObject);
+    temp.set('logMetadata', "ABC123");
+    logger.warn("writing warn level:", temp);*/
+    
+    // Associative Array: Usage still complicated, and winston doesn't log the Array contents, though console.log does
+/*    var temp:any = new Array();
+    temp["logObject"] = stringObject;
+    temp["logMetadata"] = "ABC123";
+    logger.warn("writing warn level:", temp);*/
 });
 
 test("Logger with default parameters can add and remove transports", async t => {

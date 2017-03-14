@@ -6,7 +6,6 @@ import * as winston from "winston";
 const timeStamp: string = "timestamp";
 
 export class Logger implements ILogger {
-
     private static flag: boolean = true;
     private globalLogLevel: string = "debug";
     private logger: LoggerInstance;
@@ -23,6 +22,10 @@ export class Logger implements ILogger {
         let consoleTransport = new winston.transports.Console({
             colorize: true,
             level: this.globalLogLevel,
+/*            prettyPrint: function ( object: any ){
+                return JSON.stringify(object);
+            },            
+            stringify: (obj: any) => JSON.stringify(obj),*/
         });
 
         this.logger.configure({
@@ -52,39 +55,43 @@ export class Logger implements ILogger {
         }
     }
 
-   public error(msg: string, logObject?: any, loggingMetadata?: string): void {
-        this.logger.error(msg, logObject, loggingMetadata);
+   public error(msg: string, logObject?: any, logMetadata?: string): void {
+        this.logger.error(msg, logObject, logMetadata);
     }
 
-    public warn(msg: string, logObject?: any, loggingMetadata?: string): void {
-       if(typeof(logObject === 'undefined') && typeof(loggingMetadata) !== 'undefined')
+/*    public warn(msg: string, logObject?: any, logMetadata?: string): void {
+       if(typeof(logObject === 'undefined') && typeof(logMetadata) !== 'undefined')
        {
-           this.logger.warn(msg, loggingMetadata);
+           this.logger.warn(msg, logMetadata);
        }
-       else if (typeof(logObject !== 'undefined') && typeof(loggingMetadata) !== 'undefined')
+       else if (typeof(logObject !== 'undefined') && typeof(logMetadata) !== 'undefined')
        {
            this.logger.warn(msg, logObject);
        }
-       else if (typeof(logObject === 'undefined') && typeof(loggingMetadata) === 'undefined')
+       else if (typeof(logObject === 'undefined') && typeof(logMetadata) === 'undefined')
        {
            this.logger.warn(msg);
        }        
        else
        { 
-           this.logger.warn(msg, logObject, loggingMetadata);
+           this.logger.warn(msg, logObject, logMetadata);
        }
+    }*/
+
+    public warn(msg: string, logMetadata?: string, logObject?: any): void {
+        this.logger.warn(msg, logMetadata, logObject);
     }
 
-    public info(msg: string, logObject?: any, loggingMetadata?: string): void {
-        this.logger.info(msg, logObject, loggingMetadata);
+    public info(msg: string, logObject?: any, logMetadata?: string): void {
+        this.logger.info(msg, logObject, logMetadata);
     }
 
-    public verbose(msg: string, logObject?: any, loggingMetadata?: string): void {
-        this.logger.verbose(msg, logObject, loggingMetadata);
+    public verbose(msg: string, logObject?: any, logMetadata?: string): void {
+        this.logger.verbose(msg, logObject, logMetadata);
     }
 
-    public debug(msg: string, logObject?: any, loggingMetadata?: string): void {
-        this.logger.debug(msg, logObject, loggingMetadata);
+    public debug(msg: string, logObject?: any, logMetadata?: string): void {
+        this.logger.debug(msg, logObject, logMetadata);
     }
 
     public getConfiguredTransports(): Array<any> {
@@ -100,9 +107,8 @@ export class Logger implements ILogger {
     public removeTransport(transportObject: any): void {
         this.logger.remove(transportObject);
 
-        var index = this.transportList.indexOf(transportObject);
-        if (index > -1)
-        {
+        let index = this.transportList.indexOf(transportObject);
+        if (index > -1) {
             this.transportList.splice(index, 1);
         }
     }

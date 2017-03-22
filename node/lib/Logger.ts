@@ -22,10 +22,6 @@ export class Logger implements ILogger {
         let consoleTransport = new winston.transports.Console({
             colorize: true,
             level: this.globalLogLevel,
-/*            prettyPrint: function ( object: any ){
-                return JSON.stringify(object);
-            },            
-            stringify: (obj: any) => JSON.stringify(obj),*/
         });
 
         this.logger.configure({
@@ -55,43 +51,24 @@ export class Logger implements ILogger {
         }
     }
 
-   public error(msg: string, logObject?: any, logMetadata?: string): void {
-        this.logger.error(msg, logObject, logMetadata);
+   public error(msg: string, logMetadata?: string, logObject?: any): void {
+        this.logger.error(msg, logMetadata, logObject);
     }
-
-/*    public warn(msg: string, logObject?: any, logMetadata?: string): void {
-       if(typeof(logObject === 'undefined') && typeof(logMetadata) !== 'undefined')
-       {
-           this.logger.warn(msg, logMetadata);
-       }
-       else if (typeof(logObject !== 'undefined') && typeof(logMetadata) !== 'undefined')
-       {
-           this.logger.warn(msg, logObject);
-       }
-       else if (typeof(logObject === 'undefined') && typeof(logMetadata) === 'undefined')
-       {
-           this.logger.warn(msg);
-       }        
-       else
-       { 
-           this.logger.warn(msg, logObject, logMetadata);
-       }
-    }*/
 
     public warn(msg: string, logMetadata?: string, logObject?: any): void {
         this.logger.warn(msg, logMetadata, logObject);
     }
 
-    public info(msg: string, logObject?: any, logMetadata?: string): void {
-        this.logger.info(msg, logObject, logMetadata);
+    public info(msg: string, logMetadata?: string, logObject?: any): void {
+        this.logger.info(msg, logMetadata, logObject);
     }
 
-    public verbose(msg: string, logObject?: any, logMetadata?: string): void {
-        this.logger.verbose(msg, logObject, logMetadata);
+    public verbose(msg: string, logMetadata?: string, logObject?: any): void {
+        this.logger.verbose(msg, logMetadata, logObject);
     }
 
-    public debug(msg: string, logObject?: any, logMetadata?: string): void {
-        this.logger.debug(msg, logObject, logMetadata);
+    public debug(msg: string, logMetadata?: string, logObject?: any): void {
+        this.logger.debug(msg, logMetadata, logObject);
     }
 
     public getConfiguredTransports(): Array<any> {

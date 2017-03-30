@@ -167,6 +167,14 @@ test("Logger with default parameters can add and remove transports", async t => 
     t.is(logger.getConfiguredTransports().length, 2);
 });
 
+test("Getter/Setter for a transport logLevel", async t => {
+    let logger = new Logger();
+    let transportList: Array<any> = logger.getConfiguredTransports();
+    t.is(logger.getLogLevel(transportList[0]), 'debug'); // default log level
+    logger.setLogLevel(transportList[0], 'info');
+    t.is(logger.getLogLevel(transportList[0]), 'info');
+});
+
 test.after("Deleting created log file", async t => {
     let fullPathName = path.join(__dirname, testLogFileName);
     return fs.unlinkSync(fullPathName);

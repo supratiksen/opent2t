@@ -8,4 +8,6 @@ export interface ILogger {
     getConfiguredTransports(): Array<any>;
     addTransport(transportObject: any): void;
     removeTransport(transportObject: any): void;
+    getLogLevel(transportObject: any): any;
+    setLogLevel(transportObject: any, logLevel: string): void;
 }

@@ -85,8 +85,25 @@ export class Logger implements ILogger {
         this.logger.remove(transportObject);
 
         let index = this.transportList.indexOf(transportObject);
+
         if (index > -1) {
             this.transportList.splice(index, 1);
+        }
+    }
+
+    public getLogLevel(transportObject: any): any {
+        let index = this.transportList.indexOf(transportObject);
+
+        if (index > -1) {
+            return this.transportList[index].level;
+        }
+    }
+
+    public setLogLevel(transportObject: any, logLevel: string): void {
+        let index = this.transportList.indexOf(transportObject);
+
+        if (index > -1) {
+            this.transportList[index].level = logLevel;
         }
     }
 
